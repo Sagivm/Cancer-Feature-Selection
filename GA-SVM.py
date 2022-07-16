@@ -6,10 +6,11 @@ from data.spectf.read_data import *
 from sklearn.svm import SVC
 from genetic_selection import GeneticSelectionCV
 from util.ga_svm_utils import *
+import collections
 def main():
-    N = 50
+    N = 40
     N_CROSS =4
-    GENERATIONS = 20
+    GENERATIONS = 10
     MUTATION_RATE = 0.2
 
     X_train, y_train = read_train()
@@ -42,7 +43,7 @@ def main():
                     child,
                     evaluate_feature_selection(X_train, y_train, X_test, y_test, child)
                 ))
-            best_couple_children = sorted(children_rank, key=lambda y: y[1], reverse=True)[:1]
+            best_couple_children = sorted(children_rank, key=lambda y: y[1], reverse=True)[:2]
             best_children += best_couple_children
 
         # Mutation
@@ -56,7 +57,11 @@ def main():
         gen_bests[mutation_candidate_index] = (mutated_candidate,acc)
         x=0
         gen_bests = gen_bests + best_children
-        print(sorted(gen_bests, key=lambda y: y[1], reverse=True)[0][1])
+        best_candidate = sorted(gen_bests, key=lambda y: y[1], reverse=True)[0]
+        gen_acc = best_candidate[1]
+        feature_percentage = np.sum(best_candidate[0])/len(best_candidate[0])
+        print(f"accuracy - {gen_acc} , feature_percentage - {feature_percentage}")
+        print(best_candidate[0])
     x=0
 if __name__ == "__main__":
     main()
