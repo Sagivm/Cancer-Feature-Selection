@@ -8,10 +8,10 @@ from genetic_selection import GeneticSelectionCV
 from util.ga_svm_utils import *
 import collections
 def main():
-    N = 40
+    N = 100
     N_CROSS =4
-    GENERATIONS = 10
-    MUTATION_RATE = 0.2
+    GENERATIONS = 20
+    MUTATION_RATE = 0.4
 
     X_train, y_train = read_train()
     X_test, y_test = read_test()
@@ -61,7 +61,7 @@ def main():
         gen_acc = best_candidate[1]
         feature_percentage = np.sum(best_candidate[0])/len(best_candidate[0])
         print(f"accuracy - {gen_acc} , feature_percentage - {feature_percentage}")
-        print(best_candidate[0])
-    x=0
+        print(np.where(best_candidate[0]==1))
+
 if __name__ == "__main__":
     main()
