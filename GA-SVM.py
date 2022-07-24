@@ -6,15 +6,24 @@ from data.spectf.read_data import *
 from sklearn.svm import SVC
 from genetic_selection import GeneticSelectionCV
 from util.ga_svm_utils import *
+from sklearn.preprocessing import StandardScaler
 import collections
 def main():
     N = 100
     N_CROSS =4
     GENERATIONS = 20
-    MUTATION_RATE = 0.4
+    MUTATION_RATE = 0.2
+    N_MUTATION = 4
+
 
     X_train, y_train = read_train()
     X_test, y_test = read_test()
+
+    # Scaling
+    scaler = StandardScaler()
+    scaler.fit(np.row_stack((X_train,X_test)))
+    X_train = scaler.transform(X_train)
+    X_test = scaler.transform(X_test)
     features = np.random.randint(2, size=(N,X_train.shape[1]))
 
     gen_rank = list()
@@ -26,7 +35,6 @@ def main():
 
     # Take the best N/2 feature selection
     gen_bests = gen_rank
-    # gen_bests = list(map(lambda x:x[0],gen_rank))
 
     for _ in range(GENERATIONS):
         gen_bests = sorted(gen_bests, key=lambda y: y[1], reverse=True)[:int(len(gen_bests)/2)]
@@ -47,14 +55,15 @@ def main():
             best_children += best_couple_children
 
         # Mutation
-        mutation_candidate_index = random.randint(0,len(gen_bests)-1)
-        mutation_candidate = gen_bests[mutation_candidate_index]
-        mutated_candidate = mutation_candidate[0]
-        for i,v in enumerate(mutated_candidate):
-            if np.random.random()<MUTATION_RATE:
-                mutated_candidate[i]=int(not v)
-        acc = evaluate_feature_selection(X_train,y_train,X_test,y_test,mutated_candidate)
-        gen_bests[mutation_candidate_index] = (mutated_candidate,acc)
+        for _ in range(N_MUTATION):
+            mutation_candidate_index = random.randint(0,len(gen_bests)-1)
+            mutation_candidate = gen_bests[mutation_candidate_index]
+            mutated_candidate = mutation_candidate[0]
+            for i,v in enumerate(mutated_candidate):
+                if np.random.random()<MUTATION_RATE:
+                    mutated_candidate[i]=int(not v)
+            acc = evaluate_feature_selection(X_train,y_train,X_test,y_test,mutated_candidate)
+            gen_bests[mutation_candidate_index] = (mutated_candidate,acc)
         x=0
         gen_bests = gen_bests + best_children
         best_candidate = sorted(gen_bests, key=lambda y: y[1], reverse=True)[0]
