@@ -10,7 +10,7 @@ def read_train():
         header=None
     )
     data = df.to_numpy()
-    return data[:,1:],data[:,1]
+    return data[:,1:],data[:,0]
 
 
 def read_test():
@@ -19,4 +19,4 @@ def read_test():
         header=None
     )
     data = df.to_numpy()
-    return data[:, 1:], data[:, 1]
+    return data[:, 1:], data[:, 0]
