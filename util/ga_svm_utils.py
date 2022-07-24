@@ -8,7 +8,7 @@ from genetic_selection import GeneticSelectionCV
 from sklearn.preprocessing import StandardScaler
 
 def evaluate_feature_selection(X_train, y_train, X_test, y_test, feature_selection):
-    cls = LinearSVC(max_iter=2000,tol=1e-5)
+    cls = LinearSVC(max_iter=2000,tol=1e-5,C=1e-3)
     cls.fit(
         X=X_train[:, feature_selection.astype(bool)],
         y=y_train)
