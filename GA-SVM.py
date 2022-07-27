@@ -8,10 +8,12 @@ from genetic_selection import GeneticSelectionCV
 from util.ga_svm_utils import *
 from sklearn.preprocessing import StandardScaler
 import collections
+
+
 def main():
-    N = 100
+    N = 256
     N_CROSS =4
-    GENERATIONS = 20
+    GENERATIONS = 12
     MUTATION_RATE = 0.2
     N_MUTATION = 4
 
