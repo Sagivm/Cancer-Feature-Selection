@@ -1,16 +1,14 @@
 from util.comsvm_frfe_util import *
+from sklearn.model_selection import train_test_split
+import numpy as np
+from util.util import *
+def com_svmfrfe_fs(X,y,H=10,K=5):
 
-def main():
-
-    H = 10
-    K = 5
-
-    X_train, y_train = read_train()
-    X_test, y_test = read_test()
+    X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.25)
 
     # Scaling
     scaler = StandardScaler()
-    scaler.fit(np.row_stack((X_train,X_test)))
+    scaler.fit(np.row_stack(X))
     X_train = scaler.transform(X_train)
     X_test = scaler.transform(X_test)
 
@@ -19,7 +17,11 @@ def main():
     best_H_features = get_H_features(X_train,y_i,H)
 
     top_features = expand_top_features(X_train,y_train,X_test,y_test,K,best_H_features)
-    print(top_features)
+    return get_active_features(X.shape[1],top_features[0])
 
 if __name__ == "__main__":
-    main()
+    X_train, y_train = read_train()
+    X_test, y_test = read_test()
+    X = np.vstack((X_train, X_test))
+    y= np.hstack((y_train,y_test))
+    print(com_svmfrfe_fs(X,y))

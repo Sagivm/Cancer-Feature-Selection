@@ -7,20 +7,14 @@ from sklearn.svm import SVC
 from genetic_selection import GeneticSelectionCV
 from util.ga_svm_utils import *
 from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
 import collections
+from util.util import  *
 
 
-def main():
-    N = 256
-    N_CROSS =4
-    GENERATIONS = 12
-    MUTATION_RATE = 0.2
-    N_MUTATION = 4
+def ga_svm_fs(X, y, N=256, N_CROSS=4, GENERATIONS=12, MUTATION_RATE=0.2, N_MUTATION=4):
 
-
-    X_train, y_train = read_train()
-    X_test, y_test = read_test()
-
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
     # Scaling
     scaler = StandardScaler()
     scaler.fit(np.row_stack((X_train,X_test)))
@@ -46,7 +40,7 @@ def main():
         for couple in couples:
             a = gen_bests[couple[0]][0]
             b = gen_bests[couple[1]][0]
-            children = crossover_couple(a,b)
+            children = crossover_couple(a,b,N_CROSS=N_CROSS)
             children_rank = list()
             for child in children:
                 children_rank.append((
@@ -69,10 +63,12 @@ def main():
         x=0
         gen_bests = gen_bests + best_children
         best_candidate = sorted(gen_bests, key=lambda y: y[1], reverse=True)[0]
-        gen_acc = best_candidate[1]
-        feature_percentage = np.sum(best_candidate[0])/len(best_candidate[0])
-        print(f"accuracy - {gen_acc} , feature_percentage - {feature_percentage}")
-        print(np.where(best_candidate[0]==1))
+    return best_candidate[0].tolist()
 
 if __name__ == "__main__":
-    main()
+
+    X_train, y_train = read_train()
+    X_test, y_test = read_test()
+    X = np.vstack((X_train, X_test))
+    y = np.hstack((y_train, y_test))
+    print(ga_svm_fs(X,y))
