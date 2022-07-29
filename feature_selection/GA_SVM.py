@@ -12,7 +12,7 @@ import collections
 from util.util import  *
 
 
-def ga_svm_fs(X, y, k, N=100, N_CROSS=4, GENERATIONS=8, MUTATION_RATE=0.2, N_MUTATION=4):
+def ga_svm_fs(X, y, k, N=50, N_CROSS=2, GENERATIONS=5, MUTATION_RATE=0.2, N_MUTATION=4):
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
     # Scaling

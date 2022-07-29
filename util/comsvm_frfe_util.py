@@ -63,12 +63,12 @@ def get_H_features(X_train,y_i,H):
             cls.fit(X_train[:, n_features], np.transpose(k))
             k_features.append(cls.coef_)
         features = np.sum(k_features, axis=1)
-        sorted_features = sorted(enumerate(features[0].tolist()),key=lambda x:x[1], reverse=True)
+        sorted_features = sorted(list(zip(n_features,features[0].tolist())),key=lambda x:x[1], reverse=True)
         best_features = list(map(lambda x: x[0],sorted_features[:int(len(features[0]) / 2)]))
         n_features = best_features
 
 
-    selector = RFE(cls, n_features_to_select=H)
+    selector = RFE(cls, n_features_to_select=H,)
     selector.fit(X_train[:, n_features], np.transpose(k))
-    best_H_features = list(map(lambda x: int(x[1:]), selector.get_feature_names_out().tolist()))
+    best_H_features = selector.get_feature_names_out(n_features).tolist()
     return best_H_features
