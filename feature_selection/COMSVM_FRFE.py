@@ -2,10 +2,12 @@ from util.comsvm_frfe_util import *
 from sklearn.model_selection import train_test_split
 import numpy as np
 from util.util import *
-def com_svmfrfe_fs(X,y,H=10,K=5):
+def com_svmfrfe_fs(X,y,k):
 
     X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.25)
 
+    H = int(3 / 4 * k)
+    K = int(1 / 4 * k)
     # Scaling
     scaler = StandardScaler()
     scaler.fit(np.row_stack(X))
@@ -24,4 +26,4 @@ if __name__ == "__main__":
     X_test, y_test = read_test()
     X = np.vstack((X_train, X_test))
     y= np.hstack((y_train,y_test))
-    print(com_svmfrfe_fs(X,y))
+    print(com_svmfrfe_fs(X,y,20))

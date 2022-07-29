@@ -25,6 +25,7 @@ def get_dy_i(X_train,y_train,y_test):
     # get class distance matrix
     classes = np.unique(np.hstack((y_train, y_test)))
     cls_centers = list()
+    # calculate d_i
 
     # calculate class centers and distance
     for cls in classes:
@@ -38,9 +39,9 @@ def get_dy_i(X_train,y_train,y_test):
         for j in classes:
             cls_dist_mat[i, j] = np.linalg.norm(cls_centers[i] - cls_centers[j])
 
-    # calculate d_i
     if len(classes) == 2:
         classes=[classes[0]]
+
     max_dist = np.max(cls_dist_mat)
     d_i = np.ndarray(shape=(len(classes), len(y_train)))
     y_i = np.ndarray(shape=(len(classes), len(y_train)))
@@ -55,19 +56,19 @@ def get_dy_i(X_train,y_train,y_test):
 
 def get_H_features(X_train,y_i,H):
     n_features = list(range(X_train.shape[1]))
-    k_features = list()
     while len(n_features) > 2 * H:
+        k_features = list()
         for k in y_i:
             cls = LinearSVC()
             cls.fit(X_train[:, n_features], np.transpose(k))
             k_features.append(cls.coef_)
         features = np.sum(k_features, axis=1)
-        n_features = int(len(features) / 2)
-        best_features = list(map(lambda x: x[0],
-                                 sorted(features, key=lambda x: x[1], reverse=True)[:n_features]))
+        sorted_features = sorted(enumerate(features[0].tolist()),key=lambda x:x[1], reverse=True)
+        best_features = list(map(lambda x: x[0],sorted_features[:int(len(features[0]) / 2)]))
         n_features = best_features
 
-        selector = RFE(cls, n_features_to_select=H)
-        selector.fit(X_train, np.transpose(k))
-        best_H_features = list(map(lambda x: int(x[1:]), selector.get_feature_names_out().tolist()))
-        return best_H_features
+
+    selector = RFE(cls, n_features_to_select=H)
+    selector.fit(X_train[:, n_features], np.transpose(k))
+    best_H_features = list(map(lambda x: int(x[1:]), selector.get_feature_names_out().tolist()))
+    return best_H_features

@@ -12,7 +12,7 @@ import collections
 from util.util import  *
 
 
-def ga_svm_fs(X, y, N=256, N_CROSS=4, GENERATIONS=12, MUTATION_RATE=0.2, N_MUTATION=4):
+def ga_svm_fs(X, y, k, N=100, N_CROSS=4, GENERATIONS=8, MUTATION_RATE=0.2, N_MUTATION=4):
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
     # Scaling
@@ -71,4 +71,4 @@ if __name__ == "__main__":
     X_test, y_test = read_test()
     X = np.vstack((X_train, X_test))
     y = np.hstack((y_train, y_test))
-    print(ga_svm_fs(X,y))
+    print(ga_svm_fs(X,y,k))
