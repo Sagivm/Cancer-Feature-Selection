@@ -7,7 +7,7 @@ from data.spectf.read_data import *
 
 def selectfdr_fs(X,y,k):
     # working dir has been up
-    cls = SelectFdr(alpha=k/X.shape[1])
+    cls = SelectFdr(alpha=0.5)
     cls.feature_names_in_ = list(range(X.shape[1]))
     cls.fit(X,y)
     return cls.get_support().astype(int)
