@@ -39,8 +39,8 @@ def get_dy_i(X_train,y_train,y_test):
         for j in classes:
             cls_dist_mat[i, j] = np.linalg.norm(cls_centers[i] - cls_centers[j])
 
-    if len(classes) == 2:
-        classes=[classes[0]]
+    # if len(classes) == 2:
+    #     classes=[classes[0]]
 
     max_dist = np.max(cls_dist_mat)
     d_i = np.ndarray(shape=(len(classes), len(y_train)))
@@ -48,7 +48,7 @@ def get_dy_i(X_train,y_train,y_test):
 
     for k in classes:
         for i, sample_cls in enumerate(y_train):
-            d_i[k, i] = 1 if sample_cls == k else 1 + cls_dist_mat[k, sample_cls] / max_dist
+            # d_i[k, i] = 1 if sample_cls == k else 1 + cls_dist_mat[k, sample_cls] / max_dist
             y_i[k, i] = -1 if sample_cls == k else 1
 
     return d_i,y_i

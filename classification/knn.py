@@ -7,6 +7,8 @@ from feature_selection import *
 from sklearn.model_selection import train_test_split
 from data.scikit_feature_dataset import *
 from data.microarray import *
+from data.biocon import *
+from data.benchmark import *
 from sklearn.model_selection import StratifiedKFold,LeaveOneOut
 from sklearn.metrics import matthews_corrcoef,roc_auc_score
 import os
@@ -21,7 +23,7 @@ def knn(X,y,k):
     for train_index, test_index in loo.split(X,y):
 
 
-        for selection_func in [("mrmr",mrmr_fs),("relieff",relief_fs), ("comsvm-frefe",com_svmfrfe_fs), ("fdr",selectfdr_fs), ("ga-svm",ga_svm_fs),]:
+        for selection_func in [("mrmr",mrmr_fs),("relieff",relief_fs), ("comsvm-frefe",com_svmfrfe_fs), ("ga-svm",ga_svm_fs),("fre",rfe_fs)]:
             X_train, X_test = X[train_index], X[test_index]
             y_train, y_test = y[train_index], y[test_index]
             print(selection_func[0])
@@ -31,8 +33,8 @@ def knn(X,y,k):
 
             neigh = KNeighborsClassifier(n_neighbors=3)
             mask = np.array(mask).astype(bool)
-            # X_train = X_train[:,mask]
-            # X_test = X_test[:,mask]
+            X_train = X_train[:,mask]
+            X_test = X_test[:,mask]
 
             start_fit_time = time.time()
             neigh.fit(X_train, y_train)
@@ -68,7 +70,10 @@ def knn(X,y,k):
 
 
 if __name__ == "__main__":
-    X,y = read_sorile()
-    y = y[:,0]-1
+    X,y = read_yang()
+    knn(X, y, 5)
     knn(X, y, 10)
     knn(X, y, 20)
+    knn(X, y, 50)
+
+
