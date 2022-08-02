@@ -55,7 +55,7 @@ def read_wu():
 
 
 
-def read_yang():
+def read_firer():
     file_i = os.path.join('data', 'benchmark', 'Fierer2010_Subject.3.csv')
     file_o = os.path.join('data', 'benchmark', 'Fierer2010_Subject.3.mf.csv')
     try:
