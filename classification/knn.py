@@ -2,6 +2,7 @@ from sklearnex import patch_sklearn
 patch_sklearn()
 from sklearn.neighbors import KNeighborsClassifier
 import numpy as np
+from sklearn.preprocessing import LabelEncoder
 from util.util import *
 from feature_selection import *
 from sklearn.model_selection import train_test_split
@@ -20,10 +21,10 @@ def knn(X,y,k):
     kf = StratifiedKFold(n_splits=10)
     loo = LeaveOneOut()
 
-    for train_index, test_index in loo.split(X,y):
+    for train_index, test_index in kf.split(X,y):
 
 
-        for selection_func in [("mrmr",mrmr_fs),("relieff",relief_fs), ("comsvm-frefe",com_svmfrfe_fs), ("ga-svm",ga_svm_fs),("fre",rfe_fs)]:
+        for selection_func in [("X",com_esvmfrfe_fs)]:
             X_train, X_test = X[train_index], X[test_index]
             y_train, y_test = y[train_index], y[test_index]
             print(selection_func[0])
@@ -52,9 +53,9 @@ def knn(X,y,k):
             print(f"Predict time: {end_predict_time - start_predict_time}")
             print("\n")
             f=str_features(mask)
-            if(selection_func[0] == "ga-svm" or selection_func[0] == "fdr"):
+            if(selection_func[0] == "ga-knn" or selection_func[0] == "fdr"):
                     f=""
-            with open("x.csv","a") as file:
+            with open("T.csv","a") as file:
                 file.write("\n".join([
                     str(neigh.score(X_test,y_test))+","+f,
                     str(matthews_corrcoef(y_test,neigh.predict(X_test))) + "," + f,
@@ -70,10 +71,42 @@ def knn(X,y,k):
 
 
 if __name__ == "__main__":
-    X,y = read_yang()
+    X, y = read_leukemia()
+    lab = LabelEncoder()
+    y = lab.fit_transform(y)
     knn(X, y, 5)
     knn(X, y, 10)
     knn(X, y, 20)
     knn(X, y, 50)
+
+    X, y = read_lung_small()
+    lab = LabelEncoder()
+    y = lab.fit_transform(y)
+    knn(X, y, 5)
+    knn(X, y, 10)
+    knn(X, y, 20)
+    knn(X, y, 50)
+
+    X, y = read_submar()
+    lab = LabelEncoder()
+    y = lab.fit_transform(y)
+    knn(X, y, 5)
+    knn(X, y, 10)
+    knn(X, y, 20)
+    knn(X, y, 50)
+
+    X, y = read_sorile()
+    lab = LabelEncoder()
+    y = lab.fit_transform(y)
+    knn(X, y, 5)
+    knn(X, y, 10)
+    knn(X, y, 20)
+    knn(X, y, 50)
+
+
+
+
+
+
 
 

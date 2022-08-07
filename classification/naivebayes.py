@@ -18,13 +18,13 @@ import time
 def naivebayes(X,y,k):
 
     #k=20
-    kf = StratifiedKFold(n_splits=10)
+    kf = StratifiedKFold(n_splits=5)
     loo = LeaveOneOut()
 
-    for train_index, test_index in loo.split(X,y):
+    for train_index, test_index in kf.split(X,y):
 
 
-        for selection_func in [("mrmr",mrmr_fs),("relieff",relief_fs), ("comsvm-frefe",com_svmfrfe_fs), ("ga-svm",ga_svm_fs),("rfe",rfe_fs)]:
+        for selection_func in [("x",com_esvmfrfe_fs)]:
             X_train, X_test = X[train_index], X[test_index]
             y_train, y_test = y[train_index], y[test_index]
             print(selection_func[0])
@@ -71,7 +71,7 @@ def naivebayes(X,y,k):
 
 
 if __name__ == "__main__":
-    X, y = read_firer()
+    X, y = read_basehock()
     lab = LabelEncoder()
     y = lab.fit_transform(y)
     naivebayes(X, y, 5)

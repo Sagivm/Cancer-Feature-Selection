@@ -4,3 +4,4 @@ from feature_selection.mRMR import mrmr_fs
 from feature_selection.reliefF import relief_fs
 from feature_selection.GA_SVM import ga_svm_fs
 from feature_selection.COMSVM_FRFE import com_svmfrfe_fs
+from feature_selection.New_COMSVM_FRFE import com_esvmfrfe_fs

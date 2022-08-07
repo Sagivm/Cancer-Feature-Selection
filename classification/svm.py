@@ -18,13 +18,12 @@ import time
 def svm(X,y,k):
 
     #k=20
-    kf = StratifiedKFold(n_splits=10)
+    kf = StratifiedKFold(n_splits=5)
     loo = LeaveOneOut()
 
-    for train_index, test_index in kf.split(X,y):
+    for train_index, test_index in loo.split(X,y):
 
-
-        for selection_func in [("mrmr",mrmr_fs),("relieff",relief_fs),("fdr",selectfdr_fs), ("comsvm-frefe",com_svmfrfe_fs), ("ga-svm",ga_svm_fs) , ("ga-svm",rfe_fs)]:
+        for selection_func in [("X", com_esvmfrfe_fs)]:
             X_train, X_test = X[train_index], X[test_index]
             y_train, y_test = y[train_index], y[test_index]
             print(selection_func[0])
@@ -71,14 +70,34 @@ def svm(X,y,k):
 
 
 if __name__ == "__main__":
-    X,y = read_yang()
-    lab = LabelEncoder()
-    y= lab.fit_transform(y)
+    X, y = read_leukemia()
+    lab = LabelEncoder  ()
+    y = lab.fit_transform(y)
     svm(X, y, 5)
     svm(X, y, 10)
     svm(X, y, 20)
     svm(X, y, 50)
 
+    X, y = read_lung_small()
+    lab = LabelEncoder()
+    y = lab.fit_transform(y)
+    svm(X, y, 5)
+    svm(X, y, 10)
+    svm(X, y, 20)
+    svm(X, y, 50)
 
+    X, y = read_submar()
+    lab = LabelEncoder()
+    y = lab.fit_transform(y)
+    svm(X, y, 5)
+    svm(X, y, 10)
+    svm(X, y, 20)
+    svm(X, y, 50)
 
-
+    X, y = read_sorile()
+    lab = LabelEncoder()
+    y = lab.fit_transform(y)
+    svm(X, y, 5)
+    svm(X, y, 10)
+    svm(X, y, 20)
+    svm(X, y, 50)

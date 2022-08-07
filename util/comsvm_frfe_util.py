@@ -1,6 +1,9 @@
+import numpy as np
 from util.ga_svm_utils import *
 from sklearn.feature_selection import RFE
-
+from sklearn.svm import SVC
+from sklearn.ensemble import BaggingClassifier
+from sklearn.model_selection import RepeatedStratifiedKFold
 def expand_top_features(X_train,y_train,X_test,y_test,K,best_H_features,n_candiadte_groups=100):
     # get not featured values
     cls = SVC()
@@ -62,13 +65,45 @@ def get_H_features(X_train,y_i,H):
             cls = LinearSVC()
             cls.fit(X_train[:, n_features], np.transpose(k))
             k_features.append(cls.coef_)
-        features = np.sum(k_features, axis=1)
+        features = np.sum(np.absolute(k_features), axis=0)
         sorted_features = sorted(list(zip(n_features,features[0].tolist())),key=lambda x:x[1], reverse=True)
         best_features = list(map(lambda x: x[0],sorted_features[:int(len(features[0]) / 2)]))
         n_features = best_features
 
-
+    cls = LinearSVC()
     selector = RFE(cls, n_features_to_select=H,)
     selector.fit(X_train[:, n_features], np.transpose(k))
     best_H_features = selector.get_feature_names_out(n_features).tolist()
     return best_H_features
+
+
+
+
+def get_ensemble_H_features(X_train,y_i,H):
+    n_features = list(range(X_train.shape[1]))
+    while len(n_features) > 2 * H:
+        k_features = list()
+
+        for k in y_i:
+            for _ in range(4):
+                X,y = get_samples(X_train[:, n_features],k)
+                cls = LinearSVC()
+                cls.fit(X, np.transpose(y))
+                k_features.append(cls.coef_)
+        features = np.sum(np.absolute(k_features), axis=0)
+        sorted_features = sorted(list(zip(n_features, features[0].tolist())), key=lambda x: x[1], reverse=True)
+        best_features = list(map(lambda x: x[0], sorted_features[:int(len(features[0]) / 2)]))
+        n_features = best_features
+
+    cls = LinearSVC()
+    selector = RFE(cls, n_features_to_select=H,)
+    selector.fit(X_train[:, n_features], np.transpose(k))
+    best_H_features = selector.get_feature_names_out(n_features).tolist()
+    return best_H_features
+
+def get_samples(X,y):
+    classes = np.unique(y)
+    new_samples=list()
+    for k in classes:
+        new_samples += np.random.choice(np.where(y==k)[0],len(np.where(y==k)[0])).tolist()
+    return X[new_samples], y[new_samples]

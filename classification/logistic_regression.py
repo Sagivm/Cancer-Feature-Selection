@@ -21,10 +21,10 @@ def naivebayes(X,y,k):
     kf = KFold(n_splits=10)
     loo = LeaveOneOut()
 
-    for train_index, test_index in loo.split(X,y):
+    for train_index, test_index in kf.split(X,y):
 
 
-        for selection_func in [("mrmr",mrmr_fs),("relieff",relief_fs),("fdr",selectfdr_fs), ("comsvm-frefe",com_svmfrfe_fs), ("ga-svm",ga_svm_fs), ("rfe",rfe_fs)]:
+        for selection_func in [("x",com_esvmfrfe_fs)]:
             X_train, X_test = X[train_index], X[test_index]
             y_train, y_test = y[train_index], y[test_index]
             print(selection_func[0])
@@ -71,23 +71,34 @@ def naivebayes(X,y,k):
 
 
 if __name__ == "__main__":
-    # X, y = read_curatedOvarianData()
-    # lab = LabelEncoder()
-    # y = lab.fit_transform(y)
-    # naivebayes(X, y, 5)
-    # naivebayes(X, y, 10)
-    # naivebayes(X, y, 20)
-    # naivebayes(X, y, 50)
-    #
-
-
-    X, y = read_curatedOvarianCLL()
+    X, y = read_leukemia()
     lab = LabelEncoder()
     y = lab.fit_transform(y)
-    # naivebayes(X, y, 5)
+    naivebayes(X, y, 5)
     naivebayes(X, y, 10)
     naivebayes(X, y, 20)
     naivebayes(X, y, 50)
 
+    X, y = read_lung_small()
+    lab = LabelEncoder()
+    y = lab.fit_transform(y)
+    naivebayes(X, y, 5)
+    naivebayes(X, y, 10)
+    naivebayes(X, y, 20)
+    naivebayes(X, y, 50)
 
+    X, y = read_submar()
+    lab = LabelEncoder()
+    y = lab.fit_transform(y)
+    naivebayes(X, y, 5)
+    naivebayes(X, y, 10)
+    naivebayes(X, y, 20)
+    naivebayes(X, y, 50)
 
+    X, y = read_sorile()
+    lab = LabelEncoder()
+    y = lab.fit_transform(y)
+    naivebayes(X, y, 5)
+    naivebayes(X, y, 10)
+    naivebayes(X, y, 20)
+    naivebayes(X, y, 50)

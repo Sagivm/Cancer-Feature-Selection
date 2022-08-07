@@ -13,7 +13,18 @@ from util.util import  *
 
 
 def ga_svm_fs(X, y, k, N=50, N_CROSS=2, GENERATIONS=5, MUTATION_RATE=0.2, N_MUTATION=4):
-
+    """
+    retrieve best feature selection using GA-SVM algorithm
+    :param X:
+    :param y:
+    :param k:
+    :param N:
+    :param N_CROSS:
+    :param GENERATIONS:
+    :param MUTATION_RATE:
+    :param N_MUTATION:
+    :return:
+    """
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
     # Scaling
     scaler = StandardScaler()
@@ -32,7 +43,7 @@ def ga_svm_fs(X, y, k, N=50, N_CROSS=2, GENERATIONS=5, MUTATION_RATE=0.2, N_MUTA
     # Take the best N/2 feature selection
     gen_bests = gen_rank
 
-    for _ in range(GENERATIONS):
+    for _ in range(GENERATIONS): # compute for number of generations
         gen_bests = sorted(gen_bests, key=lambda y: y[1], reverse=True)[:int(len(gen_bests)/2)]
         # Crossover
         couples = np.random.randint(len(gen_bests),size=(len(gen_bests),2))
@@ -61,8 +72,9 @@ def ga_svm_fs(X, y, k, N=50, N_CROSS=2, GENERATIONS=5, MUTATION_RATE=0.2, N_MUTA
             acc = evaluate_feature_selection(X_train,y_train,X_test,y_test,mutated_candidate)
             gen_bests[mutation_candidate_index] = (mutated_candidate,acc)
         x=0
-        gen_bests = gen_bests + best_children
+        gen_bests = gen_bests + best_children # The previous generation would be the input for the next one
         best_candidate = sorted(gen_bests, key=lambda y: y[1], reverse=True)[0]
+
     return best_candidate[0].tolist()
 
 if __name__ == "__main__":
