@@ -8,6 +8,13 @@ from sklearn.model_selection import train_test_split
 from util.util import *
 
 def rfe_fs(X,y,k):
+    """
+    Activate RFE on X,y to preserve k features
+    :param X:
+    :param y:
+    :param k:
+    :return:
+    """
 
     estimator = SVC(kernel="linear")
     selector = RFE(estimator,n_features_to_select=k)

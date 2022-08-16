@@ -6,8 +6,15 @@ from sklearn.metrics import roc_auc_score
 from data.spectf.read_data import *
 
 def selectfdr_fs(X,y,k):
+    """
+    Activate select-fdr on X,y
+    :param X:
+    :param y:
+    :param k:
+    :return:
+    """
     # working dir has been up
-    cls = SelectFdr(alpha=0.9)
+    cls = SelectFdr(alpha=0.1)
     cls.feature_names_in_ = list(range(X.shape[1]))
     cls.fit(X,y)
     return cls.get_support().astype(int)

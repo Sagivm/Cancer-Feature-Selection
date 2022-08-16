@@ -5,6 +5,17 @@ from sklearn.svm import SVC
 from sklearn.ensemble import BaggingClassifier
 from sklearn.model_selection import RepeatedStratifiedKFold
 def expand_top_features(X_train,y_train,X_test,y_test,K,best_H_features,n_candiadte_groups=100):
+    """
+    After aquiring the top H best features we want to re-add some old removed features by randomly sampling them
+    :param X_train:
+    :param y_train:
+    :param X_test:
+    :param y_test:
+    :param K:
+    :param best_H_features:
+    :param n_candiadte_groups:
+    :return:
+    """
     # get not featured values
     cls = SVC()
     removed_features = list(filter(lambda x: x not in best_H_features, list(range(44))))
@@ -25,6 +36,7 @@ def expand_top_features(X_train,y_train,X_test,y_test,K,best_H_features,n_candia
     return sorted(results, key=lambda x: x[1], reverse=True)[0]
 
 def get_dy_i(X_train,y_train,y_test):
+
     # get class distance matrix
     classes = np.unique(np.hstack((y_train, y_test)))
     cls_centers = list()
@@ -58,6 +70,13 @@ def get_dy_i(X_train,y_train,y_test):
 
 
 def get_H_features(X_train,y_i,H):
+    """
+    Get best H features applying FRFE
+    :param X_train:
+    :param y_i:
+    :param H:
+    :return:
+    """
     n_features = list(range(X_train.shape[1]))
     while len(n_features) > 2 * H:
         k_features = list()
@@ -80,6 +99,13 @@ def get_H_features(X_train,y_i,H):
 
 
 def get_ensemble_H_features(X_train,y_i,H):
+    """
+    Get best H features using ensemble bagging method
+    :param X_train:
+    :param y_i:
+    :param H:
+    :return:
+    """
     n_features = list(range(X_train.shape[1]))
     while len(n_features) > 2 * H:
         k_features = list()
@@ -102,6 +128,12 @@ def get_ensemble_H_features(X_train,y_i,H):
     return best_H_features
 
 def get_samples(X,y):
+    """
+    get samples from X and y while preserving the distribution of the data between the classes
+    :param X:
+    :param y:
+    :return:
+    """
     classes = np.unique(y)
     new_samples=list()
     for k in classes:

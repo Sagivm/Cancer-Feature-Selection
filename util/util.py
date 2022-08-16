@@ -1,3 +1,5 @@
+import pandas as pd
+from datomizer import Datomizer,DatoMapper,DatoTrainer,DatoGenerator
 import numpy as np
 def get_active_features(n_features,selected_features):
     """

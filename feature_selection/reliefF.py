@@ -9,6 +9,13 @@ from sklearn.preprocessing import StandardScaler
 from util.util import *
 
 def relief_fs(X,y,k):
+    """
+    Activate Relieff on X,y to preserve k features
+    :param X:
+    :param y:
+    :param k:
+    :return:
+    """
     r = ReliefF(n_neighbors=20)
     r.fit(X,y)
     top_features = r.top_features[:k]

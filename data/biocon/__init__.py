@@ -72,3 +72,15 @@ def read_ALL():
         return X, y
     except FileNotFoundError:
         raise NotImplementedError
+
+
+
+
+def prepare_df():
+    run = [("ayest",read_ayest),("all",read_ALL),("CLL",read_curatedOvarianCLL),("curated",read_curatedOvarianData),("dlbcl",read_dlbcl)]
+    for data_name,func in run:
+        X,y = func()
+        data = np.column_stack((X, y))
+        df = pd.DataFrame(data)
+        df.to_csv(f"{data_name}-data.csv")
+

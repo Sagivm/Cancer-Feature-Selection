@@ -6,6 +6,13 @@ import numpy as np
 from util.util import *
 
 def mrmr_fs(X,y,k):
+    """
+    Activate mRMR on X,y to preserve k features
+    :param X:
+    :param y:
+    :param k:
+    :return:
+    """
     # working dir has been up
 
     X_df = pd.DataFrame(X, columns = list(range(X.shape[1])))

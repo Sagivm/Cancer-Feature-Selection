@@ -3,7 +3,13 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 from util.util import *
 def com_svmfrfe_fs(X,y,k):
-
+    """
+    Activate COMSVM-FRFE on X and y to select best k features
+    :param X:
+    :param y:
+    :param k:
+    :return:
+    """
     X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.25)
 
     H = int(3 / 4 * k)
@@ -20,6 +26,7 @@ def com_svmfrfe_fs(X,y,k):
 
     top_features = expand_top_features(X_train,y_train,X_test,y_test,K,best_H_features)
     return get_active_features(X.shape[1],top_features[0])
+
 
 if __name__ == "__main__":
     X_train, y_train = read_train()

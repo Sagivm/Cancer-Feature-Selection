@@ -54,3 +54,12 @@ def read_submar():
         return X,y
     except FileNotFoundError:
         raise NotImplementedError
+
+
+def prepare_df():
+    run = [("golub",read_golub),("khan",read_khan),("su",read_su),("sorile",read_sorile),("submarine",read_submar)]
+    for data_name,func in run:
+        X,y = func()
+        data = np.column_stack((X, y))
+        df = pd.DataFrame(data)
+        df.to_csv(f"{data_name}-data.csv")

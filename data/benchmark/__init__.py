@@ -65,3 +65,12 @@ def read_firer():
         return X,y
     except FileNotFoundError:
         raise NotImplementedError
+
+
+def prepare_df():
+    run = [("fierer",read_firer),("gevers_ileum",read_gevers_ileum),("gevers_rectum",read_gevers_rectum),("morgan",read_morgan),("wu",read_wu)]
+    for data_name,func in run:
+        X,y = func()
+        data = np.column_stack((X, y))
+        df = pd.DataFrame(data)
+        df.to_csv(f"{data_name}-data.csv")

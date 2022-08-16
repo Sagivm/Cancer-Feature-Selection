@@ -3,7 +3,13 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 from util.util import *
 def com_esvmfrfe_fs(X,y,k):
-
+    """
+        Activate COMESVM-FRFE on X,y to preserve k features
+        :param X:
+        :param y:
+        :param k:
+        :return:
+    """
     X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.25)
 
     H = int(3 / 4 * k)
