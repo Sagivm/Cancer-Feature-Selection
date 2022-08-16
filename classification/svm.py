@@ -19,6 +19,7 @@ from data.biocon import *
 from data.benchmark import *
 from keras.utils import to_categorical
 
+
 def svm(X,y,k,activate_aug= False):
     """
     Activate SVM on X and y with preserving k features, activate aug if necessary

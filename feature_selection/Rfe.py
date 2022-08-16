@@ -28,4 +28,4 @@ if __name__ == "__main__":
     X_test, y_test = read_test()
     X = np.vstack((X_train, X_test))
     y = np.hstack((y_train, y_test))
-    print(rfe_fs(X, y,10))
+    rfe_fs(X, y, 10)
