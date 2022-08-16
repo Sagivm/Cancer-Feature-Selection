@@ -40,6 +40,6 @@ for example if we want to activate mRMR and the RFE we would write
  for selection_func in [("mrmr", mrmr_fs),("rfe", rfe_fs)]
 ```
 #### Choosing the CV method
-![Alt text](/img/CV_ml.png "Optional Title")
+![Alt text](img/CV_ml.png "Optional Title")
 Choosing a CV method is done by choosing between loo and Kfold CV. The detemining CV method is the one listed in the second for method 
 
